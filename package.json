@@ -6,7 +6,7 @@
   "license": "ISC",
   "scripts": {
     "start": "npm run build && cross-env NODE_ENV=production node dist/server.js",
-    "dev": "cross-env NODE_ENV=development nodemon",
+    "dev": "cross-env NODE_ENV=development nodemon --debug",
     "build": "swc src -d dist --source-maps --copy-files",
     "build:tsc": "tsc && tsc-alias",
     "test": "jest --forceExit --detectOpenHandles",
@@ -16,6 +16,7 @@
     "deploy:dev": "pm2 start ecosystem.config.js --only dev"
   },
   "dependencies": {
+    "@types/mongoose": "^5.11.97",
     "bcrypt": "^5.0.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
@@ -28,6 +29,7 @@
     "helmet": "^5.1.1",
     "hpp": "^0.2.3",
     "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.8.3",
     "morgan": "^1.10.0",
     "swagger-jsdoc": "^6.2.1",
     "swagger-ui-express": "^4.5.0",
