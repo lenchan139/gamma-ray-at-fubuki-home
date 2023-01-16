@@ -1,6 +1,17 @@
 version: '3.7'
 
 services:
+  mongodb_container:
+    image: mongo:4.4.8
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: user31
+      MONGO_INITDB_ROOT_PASSWORD: user31password
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data_container:/data/db
+
   proxy:
     image: nginx:alpine
     container_name: proxy
@@ -31,5 +42,7 @@ networks:
     driver: bridge
 
 volumes:
+  mongodb_data_container:
+
   data:
     driver: local

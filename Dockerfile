@@ -1,5 +1,5 @@
 # Common build stage
-FROM node:14.14.0-alpine3.12 as common-build-stage
+FROM node:19.4.0-alpine3.17 as common-build-stage
 
 COPY . ./app
 
