@@ -129,3 +129,5 @@ dist
 .yarn/install-state.gz
 .pnp.*
 google-credentials.json
+nginx-docker.conf
+_ssl_certs
