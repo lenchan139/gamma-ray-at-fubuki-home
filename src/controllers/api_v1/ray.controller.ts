@@ -1,10 +1,12 @@
 import { IRayObject, IRayObjectSource } from "@/interfaces/ray.interface";
 import { RayMongooseUtils } from "@/utils/ray-mongoose-utils";
+import { RayNotionApiUtils } from "@/utils/ray-notion-api-utils";
 import { config } from "dotenv";
 import { NextFunction, Request, Response } from "express";
 
 class RayController {
     private mongodbUtils: RayMongooseUtils = new RayMongooseUtils()
+    private notionApiUtils: RayNotionApiUtils = new RayNotionApiUtils()
     constructor() {
 
     }
@@ -42,16 +44,19 @@ class RayController {
             // all checking passed
             try {
                 const r = await this.mongodbUtils.recordNewRay(parsed_sv_number, raw_source)
-              if(r?._id){
-                res.json({
-                    success: true,
-                }); return;
-              }else{
-                res.json({
-                    success: false,
-                    error_code:'unknown_error'
-                }); return;
-              }
+                if (r?._id) {
+                    const notionResult = await this.notionApiUtils.addRowToRay(String(r._id), r)
+                    res.json({
+                        success: true,
+                        _id: String(r._id),
+                        result_notion:notionResult,
+                    }); return;
+                } else {
+                    res.json({
+                        success: false,
+                        error_code: 'unknown_error'
+                    }); return;
+                }
             } catch (e) {
                 console.log('error', e)
                 res.json({
@@ -70,9 +75,11 @@ class RayController {
             const r = await this.mongodbUtils.getLastDayRayRecord()
             let arr: IRayObject[] = []
             if (r?.length) arr = r.map(v => <IRayObject>v)
+            const y = await this.notionApiUtils.getRayDatabase()
             res.json({
                 success: true,
                 data: r,
+                y: y,
             }); return;
         } catch (e) {
             res.json({
