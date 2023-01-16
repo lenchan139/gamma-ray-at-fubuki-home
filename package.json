@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@notionhq/client": "^2.2.3",
+    "@types/google-spreadsheet": "^3.3.0",
     "@types/mongoose": "^5.11.97",
     "bcrypt": "^5.0.1",
     "class-transformer": "^0.5.1",

@@ -32,7 +32,7 @@ export class RayMongooseUtils {
         const ray: IRayObject = {
             createAt: new Date(),
             rayInSievert: sv_number,
-            dataSource: IRayObjectSource.fubuki_hmt,
+            dataSource: type,
         }
         const rayObject = new this.RayT(ray)
         try {
@@ -49,6 +49,15 @@ export class RayMongooseUtils {
         const lastMonthDate = new Date(currentDate.getTime() - (1000 * 60 * 60 * 24 * 30))
         const result = await this.RayT.find({
             createAt: { $gte: lastMonthDate }
+        });
+        return result;
+    }
+
+    async getAllBySrouce(s:IRayObjectSource) {
+        const currentDate = new Date()
+        const lastMonthDate = new Date(currentDate.getTime() - (1000 * 60 * 60 * 24 * 30))
+        const result = await this.RayT.find({
+            dataSource: s
         });
         return result;
     }

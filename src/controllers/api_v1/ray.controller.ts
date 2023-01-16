@@ -49,7 +49,7 @@ class RayController {
                     res.json({
                         success: true,
                         _id: String(r._id),
-                        result_notion:notionResult,
+                        result_notion: notionResult,
                     }); return;
                 } else {
                     res.json({
@@ -68,7 +68,25 @@ class RayController {
             }
         }
     };
+    public getAllRecordBySource = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
 
+        const arrIRSource = Object.values(IRayObjectSource)
+        const source = req.params?.source
+        if (source && arrIRSource.includes(<any>source)) {
+            const s = await this.mongodbUtils.getAllBySrouce(<any>source)
+            res.json({
+                success: true,
+                data:s
+            })
+        }else{
+            res.json({
+                success:false,
+                error_code: `please_pass_all_params_[source:{${arrIRSource.join(',')}}]:`,
+                p:req.query
+            })
+        }
+
+    }
 
     public getLastMonthRecords = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {

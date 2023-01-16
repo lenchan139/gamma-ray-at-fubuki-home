@@ -16,6 +16,7 @@ class RayRoute implements Routes {
       success: true,
     }))
     this.router.get('/', this.rayController.getLastMonthRecords)
+    this.router.get('/:source', this.rayController.getAllRecordBySource)
     this.router.post('/', this.rayController.recordIncomingRay)
   }
 }
