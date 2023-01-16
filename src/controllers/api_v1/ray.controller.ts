@@ -101,7 +101,6 @@ class RayController {
             res.json({
                 success: true,
                 data: r,
-                y: y,
             }); return;
         } catch (e) {
             res.json({
