@@ -11,6 +11,8 @@ services:
       - 27017:27017
     volumes:
       - mongodb_data_container:/data/db
+    networks:
+      - fubuki-asshole
 
   proxy:
     image: nginx:alpine
@@ -21,7 +23,7 @@ services:
       - ./nginx.conf:/etc/nginx/nginx.conf
     restart: 'unless-stopped'
     networks:
-      - backend
+      - fubuki-asshole
   server:
     build:
       context: ./
@@ -35,10 +37,10 @@ services:
       - /app/node_modules
     restart: 'unless-stopped'
     networks:
-      - backend
+      - fubuki-asshole
 
 networks:
-  backend:
+  fubuki-asshole:
     driver: bridge
 
 volumes:
