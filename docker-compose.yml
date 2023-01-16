@@ -5,7 +5,7 @@ services:
     image: nginx:alpine
     container_name: proxy
     ports:
-      - '80:80'
+      - '20238:80'
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
     restart: 'unless-stopped'
@@ -18,7 +18,7 @@ services:
       dockerfile: Dockerfile
     container_name: server
     ports:
-      - '3000:3000'
+      - '20235:3000'
     volumes:
       - ./:/app
       - /app/node_modules
