@@ -1,4 +1,5 @@
 import { IRayObject, IRayObjectSource } from "@/interfaces/ray.interface";
+import { RayGSheetUtils } from "@/utils/ray-gsheet-utils";
 import { RayMongooseUtils } from "@/utils/ray-mongoose-utils";
 import { RayNotionApiUtils } from "@/utils/ray-notion-api-utils";
 import { config } from "dotenv";
@@ -7,6 +8,7 @@ import { NextFunction, Request, Response } from "express";
 class RayController {
     private mongodbUtils: RayMongooseUtils = new RayMongooseUtils()
     private notionApiUtils: RayNotionApiUtils = new RayNotionApiUtils()
+    private gsheetUtils:RayGSheetUtils = new RayGSheetUtils()
     constructor() {
 
     }
@@ -46,10 +48,12 @@ class RayController {
                 const r = await this.mongodbUtils.recordNewRay(parsed_sv_number, raw_source)
                 if (r?._id) {
                     const notionResult = await this.notionApiUtils.addRowToRay(String(r._id), r)
+                    const gsheetResult = await this.gsheetUtils.addRayToSheetRow(String(r._id), r)
                     res.json({
                         success: true,
                         _id: String(r._id),
-                        result_notion: notionResult,
+                        result_notion: notionResult?true:false,
+                        result_gshhet: gsheetResult?true:false,
                     }); return;
                 } else {
                     res.json({
