@@ -8,7 +8,7 @@ import { NextFunction, Request, Response } from "express";
 class RayController {
     private mongodbUtils: RayMongooseUtils = new RayMongooseUtils()
     private notionApiUtils: RayNotionApiUtils = new RayNotionApiUtils()
-    private gsheetUtils:RayGSheetUtils = new RayGSheetUtils()
+    private gsheetUtils: RayGSheetUtils = new RayGSheetUtils()
     constructor() {
 
     }
@@ -18,7 +18,22 @@ class RayController {
         const ray_raw_number = req.body?.sv;
         const raw_source = req.body?.source;
         const arrIRSource = Object.values(IRayObjectSource)
+        const expectSecretToken = process.env.THIS_API_SENSITIVE_SECRET
+        const secretToken = req.headers.authorization
         const parsed_sv_number = parseFloat(ray_raw_number || '')
+        if(expectSecretToken ){
+            // have expect token, so must check it.
+            const prefixBearer = 'Bearer '
+            if(secretToken && secretToken.startsWith('Bearer ') && secretToken == `${prefixBearer}${expectSecretToken}`){
+                // correct format , bypass it.
+                console.log('bearer passed')
+            }else{
+                res.json({
+                    success:false,
+                    error_code:'invalid_bearer_token'
+                });return;
+            }
+        }
         if (!ray_raw_number || !raw_source) {
             // no params
             res.json({
@@ -52,8 +67,8 @@ class RayController {
                     res.json({
                         success: true,
                         _id: String(r._id),
-                        result_notion: notionResult?true:false,
-                        result_gshhet: gsheetResult?true:false,
+                        result_notion: notionResult ? true : false,
+                        result_gshhet: gsheetResult ? true : false,
                     }); return;
                 } else {
                     res.json({
@@ -80,13 +95,13 @@ class RayController {
             const s = await this.mongodbUtils.getAllBySrouce(<any>source)
             res.json({
                 success: true,
-                data:s
+                data: s
             })
-        }else{
+        } else {
             res.json({
-                success:false,
+                success: false,
                 error_code: `please_pass_all_params_[source:{${arrIRSource.join(',')}}]:`,
-                p:req.query
+                p: req.query
             })
         }
 
