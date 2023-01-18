@@ -70,7 +70,7 @@ Authorization:Bearer <LONGLONGSTRING>
 ```
 
 # APIs
-## GET /api_v1/ray
+## POST /api_v1/ray
 Paramater in Headers:
 ```
 Authorization: Bearer THIS_API_SENSITIVE_SECRET
@@ -88,7 +88,7 @@ Paramaters in body(application/json):
 | source | "fubuki_sz" | "fubuki_hmt" | "fubuki_sz" | only "fubuki_sz" or "fubuki_hmt". "fubuki_sz" for testing only. |
 
 
-## POST /api_v1/ray
+## GET /api_v1/ray
 paramaters in body:
 CONTENT_TYPE: application/json
 ```json
