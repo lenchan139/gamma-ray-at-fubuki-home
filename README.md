@@ -68,3 +68,37 @@ then every new record HTTP request should pass it like bearer token in request.A
 ```
 Authorization:Bearer <LONGLONGSTRING>
 ```
+
+# APIs
+## GET /api_v1/ray
+Paramater in Headers:
+```
+Authorization: Bearer THIS_API_SENSITIVE_SECRET
+```
+Authorization Bearer only require you set the ENV THIS_API_SENSITIVE_SECRET in previous step.
+Paramaters in body(application/json):
+```json
+{
+    "sv":"0.78", // the sv numbers
+    "source":"fubuki_sz" // the type of source, must match in enum IRayObjectSource in file src/interfaces/ray.interface.ts
+}
+```
+|  param_name | data_type | example | description |
+|  sv         | float number in string |  "0.78" | you should pass a float number but in string, so that the API will convert&rip it to correct float |
+| source | "fubuki_sz" | "fubuki_hmt" | "fubuki_sz" | only "fubuki_sz" or "fubuki_hmt". "fubuki_sz" for testing only. |
+
+
+## POST /api_v1/ray
+paramaters in body:
+CONTENT_TYPE: application/json
+```json
+{
+    "dateAfter": "", //ISO DateTime in String, optional. example: '2023-01-18T05:21:36.798Z'
+    "dateBefore": "", //ISO DateTime in String, optional. example: '2023-01-18T05:21:36.798Z'
+    "sourceType": "", // String-type enum, must match in enum IRayObjectSource in file src/interfaces/ray.interface.ts
+}
+```
+|  param_name | data_type | example | description |
+| dateAfter | string | '2023-01-18T05:21:36.798Z' | the iso datetime string. only pass you want to query records that created after that datetime |
+| dateBefore | string | '2023-01-18T05:21:36.798Z' | the iso datetime string. only pass you want to query records that created before that datetime |
+| sourceType | "fubuki_sz" | "fubuki_hmt" | "fubuki_sz" | only "fubuki_sz" or "fubuki_hmt". "fubuki_sz" for testing only. |
