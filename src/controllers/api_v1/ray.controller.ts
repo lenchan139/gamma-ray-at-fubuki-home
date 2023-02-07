@@ -4,7 +4,7 @@ import { RayMongooseUtils } from '@/utils/ray-mongoose-utils';
 import { RayNotionApiUtils } from '@/utils/ray-notion-api-utils';
 import { config } from 'dotenv';
 import { NextFunction, Request, Response } from 'express';
-
+import { Parser as CsvParser } from '@json2csv/plainjs';
 class RayController {
   private mongodbUtils: RayMongooseUtils = new RayMongooseUtils();
   private notionApiUtils: RayNotionApiUtils = new RayNotionApiUtils();
@@ -97,6 +97,7 @@ class RayController {
     const dateBeforeStr = req.query?.before;
     const dateAfterStr = req.query?.after;
     const sourceType = req.query?.source;
+    const format = req.query?.format;
     const limit = parseInt((<any>req.query?.limit) || '0')
     let before: Date = null;
     let after: Date = null;
@@ -150,11 +151,25 @@ class RayController {
       let arr: IRayObject[] = [];
       if (r?.length) arr = r.map(v => <IRayObject>v);
       const y = await this.notionApiUtils.getRayDatabase();
-      res.json({
-        success: true,
-        data: r,
-      });
-      return;
+      if (format == 'csv') {
+
+        try {
+          const parser = new CsvParser();
+          const csv = parser.parse(r);
+          // console.log(csv);
+          res.attachment('results.csv').send(csv)
+        } catch (err) {
+          console.error(err);
+        }
+      } else {
+
+        res.json({
+          success: true,
+          data: r,
+        });
+        return;
+      }
+
     } catch (e) {
       console.error('error', e)
       res.json({

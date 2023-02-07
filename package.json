@@ -17,6 +17,7 @@
     "deploy:dev": "pm2 start ecosystem.config.js --only dev"
   },
   "dependencies": {
+    "@json2csv/plainjs": "^6.1.2",
     "@notionhq/client": "^2.2.3",
     "@types/google-spreadsheet": "^3.3.0",
     "@types/mongoose": "^5.11.97",
