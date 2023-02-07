@@ -47,7 +47,7 @@ export class RayMongooseUtils {
         }
     }
 
-    async queryRecords(q: { dateBefore?: Date; dateAfter?: Date; sourceType?: IRayObjectSource }) {
+    async queryRecords(q: { dateBefore?: Date; dateAfter?: Date; sourceType?: IRayObjectSource, limit?: number }) {
         const currentDate = new Date();
         const lastMonthDate = new Date(currentDate.getTime() - 1000 * 60 * 60 * 24 * 30);
         const query: mongoose.FilterQuery<IRayObject> = {};
@@ -71,7 +71,13 @@ export class RayMongooseUtils {
         }
         console.log('incoming query', q);
         console.log('fquery', query)
-        const result = await this.RayT.find(query).sort(
+        let qx = this.RayT.find(query)
+
+        if (q?.limit && !isNaN(q?.limit)) {
+            qx = qx.limit(q?.limit || 1000)
+        }
+
+        const result = await qx.sort(
             { 'createAt': 'desc' }
         );
         return result;

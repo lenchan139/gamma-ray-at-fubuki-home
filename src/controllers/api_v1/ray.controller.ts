@@ -97,6 +97,7 @@ class RayController {
     const dateBeforeStr = req.query?.before;
     const dateAfterStr = req.query?.after;
     const sourceType = req.query?.source;
+    const limit = parseInt((<any>req.query?.limit) || '0')
     let before: Date = null;
     let after: Date = null;
     let source: IRayObjectSource | null = null;
@@ -143,8 +144,9 @@ class RayController {
         dateAfter: after,
         dateBefore: before,
         sourceType: source,
+        limit: limit && !isNaN(limit) ? limit : null,
       });
-      console.log('vvvv',2);
+      console.log('vvvv', 2);
       let arr: IRayObject[] = [];
       if (r?.length) arr = r.map(v => <IRayObject>v);
       const y = await this.notionApiUtils.getRayDatabase();
@@ -154,7 +156,7 @@ class RayController {
       });
       return;
     } catch (e) {
-        console.error('error',e)
+      console.error('error', e)
       res.json({
         success: false,
         error_code: 'write_error:' + e.String(),
