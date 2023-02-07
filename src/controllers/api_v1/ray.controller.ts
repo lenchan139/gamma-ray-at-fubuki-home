@@ -156,8 +156,9 @@ class RayController {
         try {
           const parser = new CsvParser();
           const csv = parser.parse(r.map(v=>v.toJSON()));
-          // console.log(csv);
-          res.attachment('results.csv').send(csv)
+          // console.log('query result csv',csv);
+          res.type('text/csv')
+          res.send(csv)
         } catch (err) {
           console.error(err);
         }
